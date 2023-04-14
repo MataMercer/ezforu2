@@ -118,7 +118,6 @@ export default async function clipCoupons(accessToken, storeId) {
     }
   }
   const allCoupons = await getAllCoupons(accessToken, storeId);
-  console.log(allCoupons);
 
   const unclippedCoupons = Object.entries(allCoupons).filter(
     ([key, coupon]) => !checkCouponClipped(coupon)

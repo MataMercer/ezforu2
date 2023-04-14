@@ -16,7 +16,8 @@ You will need:
 1. A computer.
 2. NodeJS version >18. Use the node --version to check your version.
 3. A 2Captcha account with a balance of around $3.
-   Nice to have:
+
+Nice to haves:
 
 - A computer that is a cheap low cost server such as a Raspberry Pi or a cheap VPC.
 - A computer with crontab.
@@ -60,4 +61,4 @@ Note for Notifications: Most email providers, such as Gmail, do not support emai
 One method I've found is using a Yahoo email account with a generated password found in settings.
 
 3. Run `npm run start` to start the script.
-4. Use [crontabguru](https://crontab.guru/) to help you write a crontab for this script.
+4. Use [crontabguru](https://crontab.guru/) to help you write a crontab for this script. The rest is outside of the scope of the tutorial.
