@@ -83,9 +83,7 @@ async function getCaptchaSolution(pageUrl) {
     const solver = new Captcha.Solver(config._2CaptchaApiKey);
     const solverResponse = await solver.recaptcha(captchaSiteKey, pageUrl);
     const captchaSolution = solverResponse.data.replace(/['"]+/g, "");
-    log.info(
-      `2Captcha Done: ${solverResponse.status} ${solverResponse.statusText}`
-    );
+    log.info("2Captcha Done.");
     return captchaSolution;
   } catch (error) {
     log.error(error);

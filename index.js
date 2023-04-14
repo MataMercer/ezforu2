@@ -7,13 +7,13 @@ import config from "./config.json" assert { type: "json" };
 async function main() {
   log.info("Starting ezforu2...");
   const accounts = config.accounts;
-  accounts.forEach(({ loginData, storeId }) => {
+  const clipAccountPromises = accounts.map(async ({ loginData, storeId }) => {
     const { email, password } = loginData;
-    getAccessToken(email, password).then((accessToken) => {
-      clipCoupons(accessToken, storeId);
-    });
+    const accessToken = await getAccessToken(email, password);
+    await clipCoupons(accessToken, storeId);
   });
-  // log.info("ezforu2 finished.");
+  await Promise.all(clipAccountPromises);
+  log.info("ezforu2 finished.");
 }
 
 main();
