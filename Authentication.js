@@ -78,6 +78,9 @@ function getAccessTokenFromCookies(cookies) {
 
 async function getCaptchaSolution(pageUrl) {
   try {
+    log.info(
+      "Getting captcha solution from 2Captcha... This may take a while."
+    );
     //found by inspecting recaptcha in the HTML page for 'sitekey'.
     const captchaSiteKey = "6Ld38BkUAAAAAPATwit3FXvga1PI6iVTb6zgXw62";
     const solver = new Captcha.Solver(config._2CaptchaApiKey);
@@ -94,9 +97,9 @@ async function getCaptchaSolution(pageUrl) {
 export default async function getAccessToken(email, password) {
   puppeteer.use(StealthPlugin());
   const browser = await puppeteer.launch({
-    executablePath:
-      "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-    headless: false,
+    // executablePath:
+    // "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    headless: true,
     slowMo: 10,
     args: [
       "--disable-web-security",

@@ -15,6 +15,7 @@
     "2captcha": "^3.0.5",
     "bunyan": "^1.8.15",
     "nodemailer": "^6.9.1",
+    "pug": "^3.0.2",
     "puppeteer": "^19.8.5",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2"

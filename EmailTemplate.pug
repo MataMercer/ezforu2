@@ -1,0 +1,12 @@
+body(style="font-family: Arial")
+    h1 #{coupons.length} VONS ForU coupon(s) clipped!
+    hr
+    ul(style="list-style: none")
+        each coupon in coupons
+            li 
+                ul(style="list-style: none") 
+                    li 
+                        img(src=coupon.image)
+                    li #{coupon.name}
+                    li #{coupon.description}
+                    li #{coupon.offerPrice}

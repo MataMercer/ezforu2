@@ -118,10 +118,24 @@ export default async function clipCoupons(accessToken, storeId) {
     }
   }
   const allCoupons = await getAllCoupons(accessToken, storeId);
+  console.log(allCoupons);
 
-  Object.entries(allCoupons)
-    .filter(([key, coupon], index) => !checkCouponClipped(coupon))
-    .forEach(([key, coupon]) => {
-      clipCoupon(accessToken, coupon.offerId, storeId, coupon.offerPgm);
-    });
+  const unclippedCoupons = Object.entries(allCoupons).filter(
+    ([key, coupon]) => !checkCouponClipped(coupon)
+  );
+
+  unclippedCoupons.forEach(([key, coupon]) => {
+    clipCoupon(accessToken, coupon.offerId, storeId, coupon.offerPgm);
+  });
+
+  const formattedCoupons = unclippedCoupons.map(([key, coupon]) => {
+    return {
+      image: coupon.image,
+      name: coupon.name,
+      description: coupon.description,
+      offerPrice: coupon.offerPrice,
+    };
+  });
+
+  return formattedCoupons;
 }
