@@ -1,8 +1,7 @@
-import fs from "fs/promises";
 import getAccessToken from "./Authentication.js";
 import clipCoupons from "./Coupons.js";
 import log from "./Logger.js";
-import config from "./config.json" assert { type: "json" };
+import config from "./Config.js";
 import {
   sendEmail,
   getEmailContentFailure,

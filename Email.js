@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import pug from "pug";
-import config from "./config.json" assert { type: "json" };
+import config from "./Config.js";
 
 export async function sendEmail(receiverEmail, emailContent) {
   const { host, port, secure, email, password } = config.emailLoginData;

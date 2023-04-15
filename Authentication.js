@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import Captcha from "2captcha";
-import config from "./config.json" assert { type: "json" };
+import config from "./Config.js";
 import log from "./Logger.js";
 
 async function getSessionToken(email, password) {
@@ -97,18 +97,18 @@ async function getCaptchaSolution(pageUrl) {
 export default async function getAccessToken(email, password) {
   puppeteer.use(StealthPlugin());
   const browser = await puppeteer.launch({
-	  product: "chrome",
+    product: "chrome",
     executablePath: "/usr/bin/chromium-browser",
     headless: true,
-	  devtools: false,
-	  dumpio: true,
+    devtools: false,
+    dumpio: true,
     slowMo: 10,
     args: [
-	"--no-sandbox",
-	    "--disable-setuid-sandbox",
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
       "--disable-web-security",
       "--disable-features=IsolateOrigins,site-per-process",
-	    "--disable-features=DefaultPassthroughCommandDecoder"
+      "--disable-features=DefaultPassthroughCommandDecoder",
     ],
   });
 
