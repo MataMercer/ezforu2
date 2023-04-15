@@ -97,13 +97,18 @@ async function getCaptchaSolution(pageUrl) {
 export default async function getAccessToken(email, password) {
   puppeteer.use(StealthPlugin());
   const browser = await puppeteer.launch({
-    // executablePath:
-    // "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+	  product: "chrome",
+    executablePath: "/usr/bin/chromium-browser",
     headless: true,
+	  devtools: false,
+	  dumpio: true,
     slowMo: 10,
     args: [
+	"--no-sandbox",
+	    "--disable-setuid-sandbox",
       "--disable-web-security",
       "--disable-features=IsolateOrigins,site-per-process",
+	    "--disable-features=DefaultPassthroughCommandDecoder"
     ],
   });
 
