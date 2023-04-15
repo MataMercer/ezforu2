@@ -16,6 +16,7 @@ You will need:
 1. A computer.
 2. NodeJS version >18. Use the node --version to check your version.
 3. A 2Captcha account with a balance of around $3.
+4. Chrome or Chromium installed.
 
 Nice to haves:
 
@@ -60,5 +61,15 @@ Email notifications are for sending whether the script ran successfully to your 
 Note for Notifications: Most email providers, such as Gmail, do not support email and password login due to security.
 One method I've found is using a Yahoo email account with a generated password found in settings.
 
-3. Run `npm run start` to start the script.
-4. Use [crontabguru](https://crontab.guru/) to help you write a crontab for this script. The rest is outside of the scope of the tutorial.
+3. Run `mkdir log` to create a folder to logging.
+4. Run `npm run start` to start the script.
+5. Use [crontabguru](https://crontab.guru/) to help you write a crontab for this script. The rest is outside of the scope of the tutorial.
+
+## Troubleshooting
+
+- Make sure the Puppeteer version matches your installed Chromium/Chrome version. [See here for matching versions](https://pptr.dev/chromium-support)
+- Make sure the Chrome execution path when initializing Puppeteer is correct. By default it uses Chromium's default linux installation path.
+
+## Plans
+
+- Docker version to ease the complication.
