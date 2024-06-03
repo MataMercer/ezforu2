@@ -75,6 +75,7 @@ function getAccessTokenFromCookies(cookies) {
 }
 
 export default async function getAccessToken(email, password){
+  log.info("Connecting to headless browser...")
   const response = await connect({
     headless: 'auto',
     args: [],
@@ -83,8 +84,8 @@ export default async function getAccessToken(email, password){
     executablePath: "/usr/bin/chromium-browser",
     }
   })
-
   const {browser, page} = response;
+  log.info("Browser connection succeeded.")
 
   const sessionToken = await getSessionToken(email, password);
 
@@ -107,7 +108,9 @@ const params = {
   await new Promise((r) => setTimeout(r, 10000));
   const cookies = await page.cookies()
   const accessToken = getAccessTokenFromCookies(cookies);
+  log.info("Access token obtained.")
   await browser.close();
+  log.info("Browser closed.")
   return accessToken
 
 }
