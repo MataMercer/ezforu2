@@ -2,34 +2,28 @@
 
 ## Overview
 
-This script logs into your Vons account via email and password and clips every Just 4 U coupon. It is
-intended to run as a Cron job that runs regularly but can be ran manually.
+This script logs into your Vons account with your email and password and clips every Just 4 U coupon. Upon finishing, it will email you a report. It is intended to run as a Cron job. 
 
-## ⚠️ Important
+Due to botting detectors on Vons' website, this script uses a headless Chrome browser to pretend to be a real user. 
 
-The Vons coupon website recently added ReCaptcha v2 to deter botters. This script relies on [2Captcha](https://2captcha.com/pricing), an image analysis service, to provide a Captcha solution on every script run. It is about $3 for 1000 Captcha solutions. It is just $3 one-time, NOT per month, so this would last a normal person running it a few times per week several years without having to pay any money. A fair trade for those who are lazy.
+Why I made this? I have a very old raspberry pi server that doesn't play nice with
+Docker or Python.
 
-## Requirements Before You Begin
+
+## Requirements
 
 You will need:
 
-1. A computer.
-2. NodeJS version >18. Use the node --version to check your version.
-3. A 2Captcha account with a balance of around $3.
-4. Chrome or Chromium installed.
-
-Nice to haves:
-
-- A computer that is a cheap low cost server such as a Raspberry Pi or a cheap VPC.
-- A computer with crontab.
-- A Yahoo email account to alert you on the status on the script.
+1. A **Linux** computer or Windows with **WSL2**.
+2. NodeJS version >19. Use the node --version to check your version. If you don't have it, I highly suggest using [NVM](https://github.com/nvm-sh/nvm).
+3. Chrome/Chromium installed. ```sudo apt-get install chromium-browser```
+4. xvfb installed for headless Chrome. ```sudo apt-get install xvfb```
 
 ## Usage
 
-1. Once you clone the repo to your computer or server of your choice, navigate to the root project directory.
-2. Open the command line and run `npm install` to install the project's dependencies.
-
-3. Create a file named config.json and copy the following Json code into it. Fill in the fields with < >'s with your information.
+1. Clone this repo to your computer and go to the repo's root directory in the CLI.
+2. Run `npm install` 
+3. Create a file named config.json and copy the following Json code into it. Replace the fields with <> with your information. Make sure you remove the <>'s.
    Fields marked with a \* symbol are required!
 
 ```
@@ -55,20 +49,22 @@ Nice to haves:
   }
 }
 ```
+4. Run `mkdir log` to create a folder to logging.
+5. Run `npm run start` to start the script.
+6. Use [crontabguru](https://crontab.guru/) to help you write a crontab for this script.
 
-Email notifications are for sending whether the script ran successfully to your personal email.
+## Email Notifications
+Email notifications are for sending whether the script ran successfully to your personal email. 
 
-Note for Notifications: Most email providers, such as Gmail, do not support email and password login due to security.
+It is important to note that most email providers, such as Gmail, do not support email and password login due to security.
 One method I've found is using a Yahoo email account with a generated password found in settings.
-
-3. Run `mkdir log` to create a folder to logging.
-4. Run `npm run start` to start the script.
-5. Use [crontabguru](https://crontab.guru/) to help you write a crontab for this script. The rest is outside of the scope of the tutorial.
 
 ## Troubleshooting
 
 - Make sure the Puppeteer version matches your installed Chromium/Chrome version. [See here for matching versions](https://pptr.dev/chromium-support)
 - Make sure the Chrome execution path when initializing Puppeteer is correct. By default it uses Chromium's default linux installation path.
+- If on WSL2, make sure ```whereis npm``` shows npm is installed on Linux not Windows.
+- If you have any questions setting it up, you can make a new issue. It would be much appreciated.
 
 ## Plans
 

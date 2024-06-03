@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import pug from "pug";
 import config from "./Config.js";
+import log from "./Logger.js";
 
 export async function sendEmail(receiverEmail, emailContent) {
   const { host, port, secure, email, password } = config.emailLoginData;
@@ -13,6 +14,7 @@ export async function sendEmail(receiverEmail, emailContent) {
       pass: password,
     },
   });
+  log.info("Initializing email transporter...")
 
   const { subject, body } = emailContent;
   const emailResponse = await transporter.sendMail({
@@ -21,6 +23,7 @@ export async function sendEmail(receiverEmail, emailContent) {
     subject,
     html: body,
   });
+  log.info("Email sent.")
 }
 
 export function getEmailContentSuccess(formattedCoupons) {
@@ -36,15 +39,3 @@ export function getEmailContentFailure(errorMessage) {
   const body = `Failed to clip coupons. Error: ${errorMessage}`;
   return { subject, body };
 }
-
-// console.log(
-//   getEmailContentSuccess([
-//     {
-//       name: "test",
-//       image:
-//         "https://www.safeway.com/CMS/j4u/offers/images/265c7c70-c04f-4672-b1b6-5300bff91486.gif",
-//       description: "description blah blah",
-//       offerPrice: "1.00",
-//     },
-//   ])
-// );

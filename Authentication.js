@@ -1,7 +1,5 @@
-import puppeteer from "puppeteer-extra";
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
-import Captcha from "2captcha";
 import config from "./Config.js";
+import { connect } from 'puppeteer-real-browser'
 import log from "./Logger.js";
 
 async function getSessionToken(email, password) {
@@ -43,7 +41,7 @@ async function getSessionToken(email, password) {
   }
 }
 
-async function getCaptchaPageUrl(sessionToken) {
+async function getAccessTokenFromSession(sessionToken) {
   const params = {
     client_id: "0oap6ku01XJqIRdl42p6",
     redirect_uri: "https://www.vons.com/bin/safeway/unified/sso/authorize",
@@ -76,85 +74,40 @@ function getAccessTokenFromCookies(cookies) {
   }
 }
 
-async function getCaptchaSolution(pageUrl) {
-  try {
-    log.info(
-      "Getting captcha solution from 2Captcha... This may take a while."
-    );
-    //found by inspecting recaptcha in the HTML page for 'sitekey'.
-    const captchaSiteKey = "6Ld38BkUAAAAAPATwit3FXvga1PI6iVTb6zgXw62";
-    const solver = new Captcha.Solver(config._2CaptchaApiKey);
-    const solverResponse = await solver.recaptcha(captchaSiteKey, pageUrl);
-    const captchaSolution = solverResponse.data.replace(/['"]+/g, "");
-    log.info("2Captcha Done.");
-    return captchaSolution;
-  } catch (error) {
-    log.error(error);
-    throw new Error("Error getting captcha solution");
-  }
-}
-
-export default async function getAccessToken(email, password) {
-  puppeteer.use(StealthPlugin());
-  const browser = await puppeteer.launch({
-    product: "chrome",
+export default async function getAccessToken(email, password){
+  const response = await connect({
+    headless: 'auto',
+    args: [],
+    fingerprint: false,
+    customConfig:{
     executablePath: "/usr/bin/chromium-browser",
-    headless: true,
-    devtools: false,
-    dumpio: true,
-    slowMo: 10,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-web-security",
-      "--disable-features=IsolateOrigins,site-per-process",
-      "--disable-features=DefaultPassthroughCommandDecoder",
-    ],
-  });
+    }
+  })
 
-  const page = await browser.newPage();
-
-  await page.setViewport({
-    width: 1920 + Math.floor(Math.random() * 100),
-    height: 1080 + Math.floor(Math.random() * 100),
-    deviceScaleFactor: 1,
-    hasTouch: false,
-    isLandscape: false,
-    isMobile: false,
-  });
-  await page.setJavaScriptEnabled(true);
-  await page.setDefaultNavigationTimeout(0);
+  const {browser, page} = response;
 
   const sessionToken = await getSessionToken(email, password);
-  const captchaPageUrl = await getCaptchaPageUrl(sessionToken);
-  await page.goto(captchaPageUrl);
 
-  const captchaSolution = await getCaptchaSolution(page.url());
+const params = {
+    client_id: "0oap6ku01XJqIRdl42p6",
+    redirect_uri: "https://www.vons.com/bin/safeway/unified/sso/authorize",
+    response_type: "code",
+    response_mode: "query",
+    state: "mucho-religion-hermon-girish",
+    nonce: "UXjlnZSbw9JhbLc5uy3A9KieH8USBOL58UlJzaAKIMQjyx48nWrK7TOnRl1C2q8e",
+    prompt: "none",
+    sessionToken: sessionToken,
+    scope: "openid profile email offline_access used_credentials",
+  };
+  const accessTokenUrl = "https://albertsons.okta.com/oauth2/ausp6soxrIyPrm8rS2p6/v1/authorize?" + new URLSearchParams(params)
+  page.goto(accessTokenUrl)
 
-  await new Promise((r) => setTimeout(r, 2000));
-  const frame = await page.$("#main-iframe");
-  const frame1stContentFrame = await frame.contentFrame();
 
-  await frame1stContentFrame.$eval(
-    "#g-recaptcha-response",
-    (el, solution) => (el.innerText = solution),
-    captchaSolution
-  );
-
-  await new Promise((r) => setTimeout(r, 2000));
-
-  await frame1stContentFrame.evaluate((captchaSolution) => {
-    try {
-      window.onCaptchaFinished(captchaSolution);
-    } catch (error) {
-      log.error(error);
-      throw new Error("Error submitting captcha solution");
-    }
-  }, captchaSolution);
-
-  await page.waitForNavigation();
-  const cookies = await page.cookies();
+  //wait for page to load with cookies.
+  await new Promise((r) => setTimeout(r, 10000));
+  const cookies = await page.cookies()
   const accessToken = getAccessTokenFromCookies(cookies);
   await browser.close();
-  return accessToken;
+  return accessToken
+
 }

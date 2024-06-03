@@ -16,14 +16,17 @@ async function main() {
       const { email, password } = loginData;
       try {
         const accessToken = await getAccessToken(email, password);
+        if (!accessToken) {
+          throw new Error("Could not get access token")
+        }
         const formattedCoupons = await clipCoupons(accessToken, storeId);
         sendEmail(
           emailRecipient || email,
           getEmailContentSuccess(formattedCoupons)
         );
       } catch (error) {
+        log.error(error)
         sendEmail(emailRecipient || email, getEmailContentFailure(error));
-        throw error;
       }
     }
   );

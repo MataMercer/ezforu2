@@ -109,9 +109,9 @@ export default async function clipCoupons(accessToken, storeId) {
       );
       console.log(couponClipResponse.status);
       console.log("Coupon clipped: " + couponId);
-      log.info(
-        `Coupon Clipped with ID ${couponId}: ${couponClipResponse.status} ${couponClipResponse.statusText}`
-      );
+      // log.info(
+      //   `Coupon Clipped with ID ${couponId}: ${couponClipResponse.status} ${couponClipResponse.statusText}`
+      // );
     } catch (error) {
       log.error(error);
       throw new Error("Error clipping coupon");
